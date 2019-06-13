@@ -1,9 +1,14 @@
 defmodule GetNomes do
-  def get() do
-    {:ok, body } = File.read("list.txt")
-    
+  def get(limit) do
+    case File.read("list.txt") do
+      {:ok, body } -> read_content(body,limit)
+      {:error,reason} -> reason
+    end
+  end
+
+  defp read_content(body,limit) do
     String.split(body)
     |> Stream.map(fn name -> %{nome: name} end)
-    |> Enum.take(100)
+    |> Enum.take(limit)
   end
 end
